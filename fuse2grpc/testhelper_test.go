@@ -15,9 +15,9 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
-	"github.com/chiyutianyi/grpcfuse/fuse2grpc"
-	"github.com/chiyutianyi/grpcfuse/mock"
-	"github.com/chiyutianyi/grpcfuse/pb"
+	"github.com/Mystarset/demo/fuse2grpc"
+	"github.com/Mystarset/demo/mock"
+	"github.com/Mystarset/demo/pb"
 )
 
 var (

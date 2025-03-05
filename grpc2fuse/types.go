@@ -16,7 +16,7 @@
 
 package grpc2fuse
 
-import "github.com/chiyutianyi/grpcfuse/pb"
+import "github.com/Mystarset/demo/pb"
 
 type RawFileSystem_ReadDirClient interface {
 	Recv() (*pb.ReadDirResponse, error)

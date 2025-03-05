@@ -10,9 +10,9 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/chiyutianyi/grpcfuse/grpc2fuse"
-	"github.com/chiyutianyi/grpcfuse/mock"
-	"github.com/chiyutianyi/grpcfuse/pb"
+	"github.com/Mystarset/demo/grpc2fuse"
+	"github.com/Mystarset/demo/mock"
+	"github.com/Mystarset/demo/pb"
 )
 
 func TestAccess(t *testing.T) {

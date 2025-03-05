@@ -28,7 +28,7 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 
-	"github.com/chiyutianyi/grpcfuse/pb"
+	"github.com/Mystarset/demo/pb"
 )
 
 func (s *server) OpenDir(ctx context.Context, req *pb.OpenDirRequest) (*pb.OpenDirResponse, error) {

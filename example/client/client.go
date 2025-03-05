@@ -28,9 +28,9 @@ import (
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 
-	"github.com/chiyutianyi/grpcfuse/grpc2fuse"
-	"github.com/chiyutianyi/grpcfuse/pb"
-	"github.com/chiyutianyi/grpcfuse/pkg/utils"
+	"github.com/Mystarset/demo/grpc2fuse"
+	"github.com/Mystarset/demo/pb"
+	"github.com/Mystarset/demo/pkg/utils"
 )
 
 func main() {

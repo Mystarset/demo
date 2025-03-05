@@ -17,7 +17,7 @@
 package fuse2grpc
 
 import (
-	"github.com/chiyutianyi/grpcfuse/pb"
+	"github.com/Mystarset/demo/pb"
 
 	"github.com/hanwen/go-fuse/v2/fuse"
 )

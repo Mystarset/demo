@@ -1,6 +1,6 @@
 SHELL = /bin/sh
 
-PKG := github.com/chiyutianyi/grpcfuse
+PKG := github.com/Mystarset/demo
 
 # Host information
 OS := $(shell uname)

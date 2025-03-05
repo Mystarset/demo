@@ -19,7 +19,7 @@ package grpc2fuse
 import (
 	"context"
 
-	"github.com/chiyutianyi/grpcfuse/pb"
+	"github.com/Mystarset/demo/pb"
 )
 
 func (fs *fileSystem) Forget(nodeid, nlookup uint64) {

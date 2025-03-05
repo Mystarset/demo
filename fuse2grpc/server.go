@@ -22,7 +22,7 @@ import (
 	grpc_logrus "github.com/grpc-ecosystem/go-grpc-middleware/logging/logrus"
 	"github.com/hanwen/go-fuse/v2/fuse"
 
-	"github.com/chiyutianyi/grpcfuse/pb"
+	"github.com/Mystarset/demo/pb"
 )
 
 // msgSizeThreshold 1mb < default grpc message size limit 4mb

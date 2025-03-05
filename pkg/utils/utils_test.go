@@ -22,7 +22,7 @@ import (
 	"github.com/alecthomas/assert"
 	"github.com/sirupsen/logrus"
 
-	"github.com/chiyutianyi/grpcfuse/pkg/utils"
+	"github.com/Mystarset/demo/pkg/utils"
 )
 
 func TestGetLogLevel(t *testing.T) {

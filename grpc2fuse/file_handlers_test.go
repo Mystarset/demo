@@ -9,9 +9,9 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/require"
 
-	"github.com/chiyutianyi/grpcfuse/grpc2fuse"
-	"github.com/chiyutianyi/grpcfuse/mock"
-	"github.com/chiyutianyi/grpcfuse/pb"
+	"github.com/Mystarset/demo/grpc2fuse"
+	"github.com/Mystarset/demo/mock"
+	"github.com/Mystarset/demo/pb"
 )
 
 func TestRead(t *testing.T) {

@@ -20,7 +20,7 @@ import (
 	"context"
 	"io"
 
-	"github.com/chiyutianyi/grpcfuse/pb"
+	"github.com/Mystarset/demo/pb"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/hanwen/go-fuse/v2/fuse"

@@ -23,7 +23,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/protobuf/types/known/emptypb"
 
-	"github.com/chiyutianyi/grpcfuse/pb"
+	"github.com/Mystarset/demo/pb"
 )
 
 func (s *server) Forget(ctx context.Context, req *pb.ForgetRequest) (*emptypb.Empty, error) {

@@ -19,7 +19,7 @@ package fuse2grpc
 import (
 	"github.com/hanwen/go-fuse/v2/fuse"
 
-	"github.com/chiyutianyi/grpcfuse/pb"
+	"github.com/Mystarset/demo/pb"
 )
 
 func toFuseInHeader(in *pb.InHeader, out *fuse.InHeader) {
