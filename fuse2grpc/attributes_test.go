@@ -1,120 +1,190 @@
-package fuse2grpc_test
+package fuse2grpc
 
 import (
+	"context"
 	"testing"
 
 	"github.com/hanwen/go-fuse/v2/fuse"
+	"github.com/stretchr/testify/assert"
+
+	"github.com/Mystarset/demo/pb"
 )
 
 type mockRawFileSystem struct {
-	getAttrFunc func(cancel <-chan struct{}, in *fuse.GetAttrIn, out *fuse.AttrOut) fuse.Status
-	setAttrFunc func(cancel <-chan struct{}, in *fuse.SetAttrIn, out *fuse.AttrOut) fuse.Status
+	fuse.RawFileSystem
+	getAttrStatus fuse.Status
+	setAttrStatus fuse.Status
+	attrOut       fuse.AttrOut
 }
 
-func (m *mockRawFileSystem) String() string                                                                { return "mock" }
-func (m *mockRawFileSystem) Init(server *fuse.Server)                                                     {}
-func (m *mockRawFileSystem) StatFs(cancel <-chan struct{}, in *fuse.InHeader, out *fuse.StatfsOut) fuse.Status {
-	return fuse.ENOSYS
-}
-func (m *mockRawFileSystem) Lookup(cancel <-chan struct{}, header *fuse.InHeader, name string, out *fuse.EntryOut) fuse.Status {
-	return fuse.ENOSYS
-}
-func (m *mockRawFileSystem) Forget(nodeID uint64, nlookup uint64)                                        {}
-func (m *mockRawFileSystem) Access(cancel <-chan struct{}, input *fuse.AccessIn) fuse.Status             { return fuse.ENOSYS }
-func (m *mockRawFileSystem) GetXAttr(cancel <-chan struct{}, header *fuse.InHeader, attr string, dest []byte) (uint32, fuse.Status) {
-	return 0, fuse.ENOSYS
-}
-func (m *mockRawFileSystem) ListXAttr(cancel <-chan struct{}, header *fuse.InHeader, dest []byte) (uint32, fuse.Status) {
-	return 0, fuse.ENOSYS
-}
-func (m *mockRawFileSystem) SetXAttr(cancel <-chan struct{}, input *fuse.SetXAttrIn, attr string, data []byte) fuse.Status {
-	return fuse.ENOSYS
-}
-func (m *mockRawFileSystem) RemoveXAttr(cancel <-chan struct{}, header *fuse.InHeader, attr string) fuse.Status {
-	return fuse.ENOSYS
-}
-func (m *mockRawFileSystem) Create(cancel <-chan struct{}, input *fuse.CreateIn, name string, out *fuse.CreateOut) fuse.Status {
-	return fuse.ENOSYS
-}
-func (m *mockRawFileSystem) Mkdir(cancel <-chan struct{}, input *fuse.MkdirIn, name string, out *fuse.EntryOut) fuse.Status {
-	return fuse.ENOSYS
-}
-func (m *mockRawFileSystem) Unlink(cancel <-chan struct{}, header *fuse.InHeader, name string) fuse.Status {
-	return fuse.ENOSYS
-}
-func (m *mockRawFileSystem) Rmdir(cancel <-chan struct{}, header *fuse.InHeader, name string) fuse.Status {
-	return fuse.ENOSYS
-}
-func (m *mockRawFileSystem) Rename(cancel <-chan struct{}, input *fuse.RenameIn, oldName string, newName string) fuse.Status {
-	return fuse.ENOSYS
-}
-func (m *mockRawFileSystem) Link(cancel <-chan struct{}, input *fuse.LinkIn, filename string, out *fuse.EntryOut) fuse.Status {
-	return fuse.ENOSYS
-}
-func (m *mockRawFileSystem) Symlink(cancel <-chan struct{}, header *fuse.InHeader, pointedTo string, linkName string, out *fuse.EntryOut) fuse.Status {
-	return fuse.ENOSYS
-}
-func (m *mockRawFileSystem) Readlink(cancel <-chan struct{}, header *fuse.InHeader) ([]byte, fuse.Status) {
-	return nil, fuse.ENOSYS
-}
-func (m *mockRawFileSystem) Mknod(cancel <-chan struct{}, input *fuse.MknodIn, name string, out *fuse.EntryOut) fuse.Status {
-	return fuse.ENOSYS
-}
+func (m *mockRawFileSystem) String() string { return "mock" }
+
 func (m *mockRawFileSystem) GetAttr(cancel <-chan struct{}, input *fuse.GetAttrIn, out *fuse.AttrOut) fuse.Status {
-	if m.getAttrFunc != nil {
-		return m.getAttrFunc(cancel, input, out)
+	if m.getAttrStatus != fuse.OK {
+		return m.getAttrStatus
 	}
-	return fuse.ENOSYS
+	*out = m.attrOut
+	return fuse.OK
 }
-func (m *mockRawFileSystem) SetAttr(cancel <-chan struct{}, input *fuse.SetAttrIn, out *fuse.AttrOut) fuse.Status {
-	if m.setAttrFunc != nil {
-		return m.setAttrFunc(cancel, input, out)
-	}
-	return fuse.ENOSYS
-}
-func (m *mockRawFileSystem) Open(cancel <-chan struct{}, input *fuse.OpenIn, out *fuse.OpenOut) fuse.Status {
-	return fuse.ENOSYS
-}
-func (m *mockRawFileSystem) Read(cancel <-chan struct{}, input *fuse.ReadIn, buf []byte) (fuse.ReadResult, fuse.Status) {
-	return nil, fuse.ENOSYS
-}
-func (m *mockRawFileSystem) Lseek(cancel <-chan struct{}, in *fuse.LseekIn, out *fuse.LseekOut) fuse.Status {
-	return fuse.ENOSYS
-}
-func (m *mockRawFileSystem) GetLk(cancel <-chan struct{}, input *fuse.LkIn, out *fuse.LkOut) fuse.Status {
-	return fuse.ENOSYS
-}
-func (m *mockRawFileSystem) SetLk(cancel <-chan struct{}, input *fuse.LkIn) fuse.Status { return fuse.ENOSYS }
-func (m *mockRawFileSystem) SetLkw(cancel <-chan struct{}, input *fuse.LkIn) fuse.Status {
-	return fuse.ENOSYS
-}
-func (m *mockRawFileSystem) Release(cancel <-chan struct{}, input *fuse.ReleaseIn)                       {}
-func (m *mockRawFileSystem) Write(cancel <-chan struct{}, input *fuse.WriteIn, data []byte) (uint32, fuse.Status) {
-	return 0, fuse.ENOSYS
-}
-func (m *mockRawFileSystem) CopyFileRange(cancel <-chan struct{}, input *fuse.CopyFileRangeIn) (uint32, fuse.Status) {
-	return 0, fuse.ENOSYS
-}
-func (m *mockRawFileSystem) Flush(cancel <-chan struct{}, input *fuse.FlushIn) fuse.Status { return fuse.ENOSYS }
-func (m *mockRawFileSystem) Fsync(cancel <-chan struct{}, input *fuse.FsyncIn) fuse.Status { return fuse.ENOSYS }
-func (m *mockRawFileSystem) Fallocate(cancel <-chan struct{}, input *fuse.FallocateIn) fuse.Status {
-	return fuse.ENOSYS
-}
-func (m *mockRawFileSystem) OpenDir(cancel <-chan struct{}, input *fuse.OpenIn, out *fuse.OpenOut) fuse.Status {
-	return fuse.ENOSYS
-}
-func (m *mockRawFileSystem) ReadDir(cancel <-chan struct{}, input *fuse.ReadIn, out *fuse.DirEntryList) fuse.Status {
-	return fuse.ENOSYS
-}
-func (m *mockRawFileSystem) ReadDirPlus(cancel <-chan struct{}, input *fuse.ReadIn, out *fuse.DirEntryList) fuse.Status {
-	return fuse.ENOSYS
-}
-func (m *mockRawFileSystem) ReleaseDir(input *fuse.ReleaseIn)                   {}
-func (m *mockRawFileSystem) FsyncDir(cancel <-chan struct{}, input *fuse.FsyncIn) fuse.Status          { return fuse.ENOSYS }
 
-func TestMockFileSystem(t *testing.T) {
-	mock := &mockRawFileSystem{}
-	if mock.String() != "mock" {
-		t.Errorf("Expected mock.String() to return 'mock'")
+func (m *mockRawFileSystem) SetAttr(cancel <-chan struct{}, in *fuse.SetAttrIn, out *fuse.AttrOut) fuse.Status {
+	if m.setAttrStatus != fuse.OK {
+		return m.setAttrStatus
+	}
+	*out = m.attrOut
+	return fuse.OK
+}
+
+func TestGetAttr(t *testing.T) {
+	tests := []struct {
+		name           string
+		getAttrStatus  fuse.Status
+		expectedStatus int32
+		attrOut       fuse.AttrOut
+		shouldError    bool
+	}{
+		{
+			name:           "success",
+			getAttrStatus:  fuse.OK,
+			expectedStatus: 0,
+			attrOut: fuse.AttrOut{
+				Attr: fuse.Attr{
+					Ino:  123,
+					Mode: 0644,
+				},
+				AttrValid:     1,
+				AttrValidNsec: 2,
+			},
+		},
+		{
+			name:           "not implemented",
+			getAttrStatus:  fuse.ENOSYS,
+			expectedStatus: 0,
+			shouldError:    true,
+		},
+		{
+			name:           "error",
+			getAttrStatus:  fuse.EACCES,
+			expectedStatus: int32(fuse.EACCES),
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			mockFS := &mockRawFileSystem{
+				getAttrStatus: tt.getAttrStatus,
+				attrOut:      tt.attrOut,
+			}
+			server := NewServer(mockFS)
+
+			req := &pb.GetAttrRequest{
+				Header: &pb.InHeader{
+					NodeId: 1,
+					Caller: &pb.Caller{
+						Owner: &pb.Owner{
+							Uid: 1000,
+							Gid: 1000,
+						},
+						Pid: 1234,
+					},
+				},
+			}
+
+			resp, err := server.GetAttr(context.Background(), req)
+
+			if tt.shouldError {
+				assert.Error(t, err)
+				return
+			}
+
+			assert.NoError(t, err)
+			assert.Equal(t, tt.expectedStatus, resp.Status.Code)
+
+			if tt.getAttrStatus == fuse.OK {
+				assert.Equal(t, tt.attrOut.AttrValid, resp.AttrOut.AttrValid)
+				assert.Equal(t, tt.attrOut.AttrValidNsec, resp.AttrOut.AttrValidNsec)
+				assert.Equal(t, tt.attrOut.Attr.Ino, resp.AttrOut.Attr.Ino)
+				assert.Equal(t, tt.attrOut.Attr.Mode, resp.AttrOut.Attr.Mode)
+			}
+		})
+	}
+}
+
+func TestSetAttr(t *testing.T) {
+	tests := []struct {
+		name           string
+		setAttrStatus  fuse.Status
+		expectedStatus int32
+		attrOut       fuse.AttrOut
+		shouldError    bool
+	}{
+		{
+			name:           "success",
+			setAttrStatus:  fuse.OK,
+			expectedStatus: 0,
+			attrOut: fuse.AttrOut{
+				Attr: fuse.Attr{
+					Ino:  123,
+					Mode: 0644,
+				},
+			},
+		},
+		{
+			name:           "not implemented",
+			setAttrStatus:  fuse.ENOSYS,
+			expectedStatus: 0,
+			shouldError:    true,
+		},
+		{
+			name:           "error",
+			setAttrStatus:  fuse.EACCES,
+			expectedStatus: int32(fuse.EACCES),
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			mockFS := &mockRawFileSystem{
+				setAttrStatus: tt.setAttrStatus,
+				attrOut:      tt.attrOut,
+			}
+			server := NewServer(mockFS)
+
+			req := &pb.SetAttrRequest{
+				Header: &pb.InHeader{
+					NodeId: 1,
+					Caller: &pb.Caller{
+						Owner: &pb.Owner{
+							Uid: 1000,
+							Gid: 1000,
+						},
+						Pid: 1234,
+					},
+				},
+				Valid:   1,
+				Mode:    0644,
+				Owner:   &pb.Owner{Uid: 1000, Gid: 1000},
+				Size:    1024,
+				Atime:   123456,
+				Mtime:   123456,
+				Ctime:   123456,
+				Padding: 0,
+			}
+
+			resp, err := server.SetAttr(context.Background(), req)
+
+			if tt.shouldError {
+				assert.Error(t, err)
+				return
+			}
+
+			assert.NoError(t, err)
+			assert.Equal(t, tt.expectedStatus, resp.Status.Code)
+
+			if tt.setAttrStatus == fuse.OK {
+				assert.Equal(t, tt.attrOut.Attr.Ino, resp.AttrOut.Attr.Ino)
+				assert.Equal(t, tt.attrOut.Attr.Mode, resp.AttrOut.Attr.Mode)
+			}
+		})
 	}
 }
